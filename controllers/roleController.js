@@ -1,42 +1,27 @@
-const Role = require('../models/index').Role;
+const { Role } = require('../models');
 
-// Import the necessary modules and models
-
-// Controller methods for CRUD operations
 const roleController = {
-    // Create a new role
     createRole: async (req, res) => {
         try {
-            const { street, city, state, country, postalCode } = req.body;
-            const newRole = new Role({
-                street,
-
-                city,
-                state,
-                country,
-                postalCode
-            });
-            const savedRole = await newRole.save();
-            res.status(201).json(savedRole);
+            const newRole = await Role.create(req.body);
+            res.status(201).json(newRole);
         } catch (error) {
             res.status(500).json({ error: 'Failed to create role' });
         }
     },
 
-    // Get all rolees
     getAllRoles: async (req, res) => {
         try {
-            const rolees = await Role.find();
-            res.json(rolees);
+            const roles = await Role.findAll();
+            res.json(roles);
         } catch (error) {
-            res.status(500).json({ error: 'Failed to get rolees' });
+            res.status(500).json({ error: 'Failed to get roles' });
         }
     },
 
-    // Get a single role by ID
     getRoleById: async (req, res) => {
         try {
-            const role = await Role.findById(req.params.id);
+            const role = await Role.findByPk(req.params.id);
             if (!role) {
                 return res.status(404).json({ error: 'Role not found' });
             }
@@ -46,38 +31,32 @@ const roleController = {
         }
     },
 
-    // Update an role by ID
     updateRole: async (req, res) => {
         try {
-            const { street, city, state, country, postalCode } = req.body;
-            const updatedRole = await Role.findByIdAndUpdate(
-                req.params.id,
-                {
-                    street,
-                    city,
-                    state,
-                    country,
-                    postalCode
-                },
-                { new: true }
-            );
-            if (!updatedRole) {
-                return res.status(404).json({ error: 'Role not found' });
+            const [updated] = await Role.update(req.body, {
+                where: { id: req.params.id }
+            });
+            if (updated) {
+                const updatedRole = await Role.findByPk(req.params.id);
+                res.json(updatedRole);
+            } else {
+                res.status(404).json({ error: 'Role not found' });
             }
-            res.json(updatedRole);
         } catch (error) {
             res.status(500).json({ error: 'Failed to update role' });
         }
     },
 
-    // Delete an role by ID
     deleteRole: async (req, res) => {
         try {
-            const deletedRole = await Role.findByIdAndDelete(req.params.id);
-            if (!deletedRole) {
-                return res.status(404).json({ error: 'Role not found' });
+            const deleted = await Role.destroy({
+                where: { id: req.params.id }
+            });
+            if (deleted) {
+                res.json({ message: 'Role deleted successfully' });
+            } else {
+                res.status(404).json({ error: 'Role not found' });
             }
-            res.json(deletedRole);
         } catch (error) {
             res.status(500).json({ error: 'Failed to delete role' });
         }
