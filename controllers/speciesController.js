@@ -1,74 +1,64 @@
 const Species = require('../models/index').Species;
 
-// Get all species
-exports.getAllSpecies = async (req, res) => {
-    try {
-        const species = await Species.find();
-        res.json(species);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
-
-// Get a single species
-exports.getSpeciesById = async (req, res) => {
-    try {
-        const species = await Species.findById(req.params.id);
-        if (!species) {
-            return res.status(404).json({ message: 'Species not found' });
+const speciesController = {
+    create: async (req, res) => {
+        try {
+            const newSpecies = await Species.create(req.body);
+            res.status(201).json(newSpecies);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to create species' });
         }
-        res.json(species);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
+    },
 
-// Create a new species
-exports.createSpecies = async (req, res) => {
-    const species = new Species({
-        name: req.body.name,
-        description: req.body.description,
-        // Add other fields as needed
-    });
-
-    try {
-        const newSpecies = await species.save();
-        res.status(201).json(newSpecies);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-};
-
-// Update a species
-exports.updateSpecies = async (req, res) => {
-    try {
-        const species = await Species.findById(req.params.id);
-        if (!species) {
-            return res.status(404).json({ message: 'Species not found' });
+    getAll: async (req, res) => {
+        try {
+            const speciesList = await Species.findAll();
+            res.json(speciesList);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to get species' });
         }
+    },
 
-        species.name = req.body.name;
-        species.description = req.body.description;
-        // Update other fields as needed
-
-        const updatedSpecies = await species.save();
-        res.json(updatedSpecies);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-};
-
-// Delete a species
-exports.deleteSpecies = async (req, res) => {
-    try {
-        const species = await Species.findById(req.params.id);
-        if (!species) {
-            return res.status(404).json({ message: 'Species not found' });
+    getById: async (req, res) => {
+        try {
+            const species = await Species.findByPk(req.params.id);
+            if (!species) {
+                res.status(404).json({ error: 'Species not found' });
+            } else {
+                res.json(species);
+            }
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to get species' });
         }
+    },
 
-        await species.remove();
-        res.json({ message: 'Species deleted' });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+    updateById: async (req, res) => {
+        try {
+            const [updated] = await Species.update(req.body, { where: { id: req.params.id } });
+            if (!updated) {
+                res.status(404).json({ error: 'Species not found' });
+            } else {
+                const updatedSpecies = await Species.findByPk(req.params.id);
+                res.json(updatedSpecies);
+            }
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to update species' });
+        }
+    },
+
+    deleteById: async (req, res) => {
+        try {
+            const deleted = await Species.destroy({ where: { id: req.params.id } });
+            if (!deleted) {
+                res.status(404).json({ error: 'Species not found' });
+            } else {
+                res.json({ message: 'Species deleted successfully' });
+            }
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to delete species' });
+        }
     }
 };
+
+
+module.exports = speciesController;

@@ -1,80 +1,66 @@
-const Plant = require('../models/index').Plant;
+const { Plant } = require('../models');
 
-// Get all plants
-const getAllPlants = async (req, res) => {
-    try {
-        const plants = await Plant.find();
-        res.json(plants);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
-
-// Get a single plant
-const getPlantById = async (req, res) => {
-    try {
-        const plant = await Plant.findById(req.params.id);
-        if (!plant) {
-            return res.status(404).json({ message: 'Plant not found' });
+const plantController = {
+    create: async (req, res) => {
+        try {
+            const newPlant = await Plant.create(req.body);
+            res.status(201).json(newPlant);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to create plant' });
         }
-        res.json(plant);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
+    },
 
-// Create a new plant
-const createPlant = async (req, res) => {
-    const plant = new Plant({
-        // Set the properties of the plant object based on the request body
-        // Example: name: req.body.name, description: req.body.description
-    });
-
-    try {
-        const newPlant = await plant.save();
-        res.status(201).json(newPlant);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-};
-
-// Update a plant
-const updatePlant = async (req, res) => {
-    try {
-        const plant = await Plant.findById(req.params.id);
-        if (!plant) {
-            return res.status(404).json({ message: 'Plant not found' });
+    getAll: async (req, res) => {
+        try {
+            const plants = await Plant.findAll();
+            res.json(plants);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to get plants' });
         }
+    },
 
-        // Update the properties of the plant object based on the request body
-        // Example: plant.name = req.body.name; plant.description = req.body.description;
-
-        const updatedPlant = await plant.save();
-        res.json(updatedPlant);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-};
-
-// Delete a plant
-const deletePlant = async (req, res) => {
-    try {
-        const plant = await Plant.findById(req.params.id);
-        if (!plant) {
-            return res.status(404).json({ message: 'Plant not found' });
+    getById: async (req, res) => {
+        try {
+            const plant = await Plant.findByPk(req.params.id);
+            if (!plant) {
+                return res.status(404).json({ error: 'Plant not found' });
+            }
+            res.json(plant);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to get plant' });
         }
+    },
 
-        await plant.remove();
-        res.json({ message: 'Plant deleted' });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+    updateById: async (req, res) => {
+        try {
+            const [updated] = await Plant.update(req.body, {
+                where: { id: req.params.id }
+            });
+            if (updated) {
+                const updatedPlant = await Plant.findByPk(req.params.id);
+                res.json(updatedPlant);
+            } else {
+                res.status(404).json({ error: 'Plant not found' });
+            }
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to update plant' });
+        }
+    },
+
+    deleteById: async (req, res) => {
+        try {
+            const deleted = await Plant.destroy({
+                where: { id: req.params.id }
+            });
+            if (deleted) {
+                res.json({ message: 'Plant deleted successfully' });
+            } else {
+                res.status(404).json({ error: 'Plant not found' });
+            }
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to delete plant' });
+        }
     }
 };
 
-module.exports = {
-    getAllPlants,
-    getPlantById,
-    createPlant,
-    updatePlant,
-    deletePlant
-};
+module.exports = plantController;
