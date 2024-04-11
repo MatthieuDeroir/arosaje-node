@@ -1,0 +1,231 @@
+openapi: 3.0.0
+info:
+  title: Arosaje API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/announces
+
+tags:
+  - name: Announce
+    description: Announce management
+
+paths:
+  /announces:
+    get:
+      tags:
+        - Announce
+      summary: Get all announces
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Announce'
+    post:
+      tags:
+        - Announce
+      summary: Add a new announce
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Announce'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announce'
+
+    put:
+      tags:
+        - Announce
+      summary: Update an announce
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Announce'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announce'
+
+  /announces/{id}:
+    get:
+      tags:
+        - Announce
+      summary: Get announce by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announce'
+    delete:
+      tags:
+        - Announce
+      summary: Delete an announce
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+
+  /announces/findByAnnouncerId/{announcerId}:
+    get:
+      tags:
+        - Announce
+      summary: Get all announces by announcer ID
+      parameters:
+        - in: path
+          name: announcerId
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Announce'
+  /announces/findByPlantId/{plantId}:
+    get:
+      tags:
+        - Announce
+      summary: Get all announces by plant ID
+      parameters:
+        - in: path
+          name: plantId
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Announce'
+  /announces/findByStartDate/{startDate}:
+    get:
+      tags:
+        - Announce
+      summary: Get all announces by start date
+      parameters:
+        - in: path
+          name: startDate
+          required: true
+          schema:
+            type: string
+            example: "2021-06-01"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Announce'
+  /announces/findByEndDate/{endDate}:
+    get:
+      tags:
+        - Announce
+      summary: Get all announces by end date
+      parameters:
+        - in: path
+          name: endDate
+          required: true
+          schema:
+            type: string
+            example: "2021-06-01"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Announce'
+  /announces/findByTitle/{title}:
+    get:
+      tags:
+        - Announce
+      summary: Get all announces by title
+      parameters:
+        - in: path
+          name: title
+          required: true
+          schema:
+            type: string
+            example: "Recherche de Gardien - Nantes"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Announce'
+
+components:
+  schemas:
+    Announce:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        announcerId:
+          type: integer
+          example: 5
+        plantId:
+          type: integer
+          example: 429
+        title:
+          type: string
+          example: "Recherche de Gardien - Nantes"
+        body:
+          type: string
+          example: "Je recherche un gardien pour ma plante squr Nantes"
+        startDate:
+          type: string
+          example: "2021-06-01"
+        endDate:
+          type: string
+          example: "2021-06-30"
+        createdAt:
+          type: string
+          example: "2021-05-01"
+        updatedAt:
+            type: string
+            example: "2021-05-02"
+

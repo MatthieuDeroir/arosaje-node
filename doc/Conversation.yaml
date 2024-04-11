@@ -1,0 +1,136 @@
+openapi: 3.0.3
+info:
+  title: Arosaje API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/conversations
+
+tags:
+  - name: Conversations
+    description: API for conversations in the system
+
+paths:
+  /conversations:
+    get:
+      tags:
+        - Conversations
+      summary: Get all conversations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Conversation'
+    post:
+      tags:
+        - Conversations
+      summary: Add a new conversation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Conversation'
+      responses:
+        '200':
+          description: OK
+          content: {}
+  /conversations/{id}:
+    get:
+      tags:
+        - Conversations
+      summary: Get conversation by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+  /conversations/findByUserId/{userId}:
+    get:
+      tags:
+        - Conversations
+      summary: Get all conversations by user ID
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Conversation'
+  /conversations/{conversationId}/messages:
+    get:
+      tags:
+          - Conversations
+      summary: Get all messages by conversation ID
+      parameters:
+        - in: path
+          name: conversationId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+components:
+  schemas:
+    Conversation:
+      type: object
+      properties:
+        Id:
+          type: integer
+          example: 435
+        user1Id:
+          type: integer
+          example: 5
+        user2Id:
+          type: integer
+          example: 7
+        createdAt:
+          type: string
+          example: "2021-06-01T12:00:00Z"
+        updatedAt:
+          type: string
+          example: "2021-06-01T12:00:00Z"
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 34
+        conversationId:
+          type: integer
+          example: 435
+        senderId:
+          type: integer
+          example: 5
+        content:
+          type: string
+          example: "Salut, ça va ?"
+        createdAt:
+          type: string
+          example: "2021-06-01T12:00:00Z"
+  
