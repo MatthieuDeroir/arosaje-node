@@ -1,29 +1,15 @@
-const User = require('../models/index').User;
+const { User } = require('../models');
 
-// Import the necessary modules and models
-
-// Controller methods for CRUD operations
 const userController = {
-    // Create a new user
     createUser: async (req, res) => {
         try {
-            const { street, city, state, country, postalCode } = req.body;
-            const newUser = new User({
-                street,
-
-                city,
-                state,
-                country,
-                postalCode
-            });
-            const savedUser = await newUser.save();
-            res.status(201).json(savedUser);
+            const newUser = await User.create(req.body);
+            res.status(201).json(newUser);
         } catch (error) {
             res.status(500).json({ error: 'Failed to create user' });
         }
     },
 
-    // Get all useres
     getAllUsers: async (req, res) => {
         try {
             const users = await User.findAll();
@@ -33,10 +19,9 @@ const userController = {
         }
     },
 
-    // Get a single user by ID
     getUserById: async (req, res) => {
         try {
-            const user = await User.findById(req.params.id);
+            const user = await User.findByPk(req.params.id);
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
             }
@@ -46,38 +31,32 @@ const userController = {
         }
     },
 
-    // Update an user by ID
     updateUser: async (req, res) => {
         try {
-            const { street, city, state, country, postalCode } = req.body;
-            const updatedUser = await User.findByIdAndUpdate(
-                req.params.id,
-                {
-                    street,
-                    city,
-                    state,
-                    country,
-                    postalCode
-                },
-                { new: true }
-            );
-            if (!updatedUser) {
-                return res.status(404).json({ error: 'User not found' });
+            const [updated] = await User.update(req.body, {
+                where: { id: req.params.id }
+            });
+            if (updated) {
+                const updatedUser = await User.findByPk(req.params.id);
+                res.json(updatedUser);
+            } else {
+                res.status(404).json({ error: 'User not found' });
             }
-            res.json(updatedUser);
         } catch (error) {
             res.status(500).json({ error: 'Failed to update user' });
         }
     },
 
-    // Delete an user by ID
     deleteUser: async (req, res) => {
         try {
-            const deletedUser = await User.findByIdAndDelete(req.params.id);
-            if (!deletedUser) {
-                return res.status(404).json({ error: 'User not found' });
+            const deleted = await User.destroy({
+                where: { id: req.params.id }
+            });
+            if (deleted) {
+                res.json({ message: 'User deleted successfully' });
+            } else {
+                res.status(404).json({ error: 'User not found' });
             }
-            res.json(deletedUser);
         } catch (error) {
             res.status(500).json({ error: 'Failed to delete user' });
         }
