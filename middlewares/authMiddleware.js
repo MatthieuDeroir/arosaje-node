@@ -1,42 +1,25 @@
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+const { verifyToken } = require('../services/authService');
 
-dotenv.config(); // Load environment variables from .env file
+/**
+ * Middleware to protect routes by verifying JWT.
+ * It expects the JWT to be sent in the Authorization header as a Bearer token.
+ */
+function authMiddleware(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).send({ error: 'No token provided. Authorization header must be of the form: Bearer [token]' });
+  }
 
-const JWT_SECRET = process.env.JWT_SECRET;
+  const token = authHeader.split(' ')[1];
+  const verified = verifyToken(token);
 
-const authMiddleware = {
-    signIn: (req, res, next) => {
-        // Implement sign in logic here
-        // Example: Verify user credentials and generate JWT token
-        const { username, password } = req.body;
+  if (!verified) {
+    return res.status(401).send({ error: 'Invalid or expired token' });
+  }
 
-        // Check if username and password are valid
-        if (true) {
-            // Generate JWT token
-            const token = jwt.sign({ username }, JWT_SECRET);
-            res.json({ token });
-        } else {
-            res.status(401).json({ message: 'Invalid credentials' });
-        }
-    },
-
-    signUp: (req, res, next) => {
-        // Implement sign up logic here
-        // Example: Create a new user and generate JWT token
-        const { username, password } = req.body;
-
-        // Create a new user
-        const newUser = {
-            id: 1,
-            username,
-            password
-        };
-
-        // Generate JWT token
-        const token = jwt.sign({ userId: newUser.id }, JWT_SECRET);
-        res.json({ token });
-    }
-};
+  // Attach user data to the request object for use in subsequent handlers
+  req.user = verified;
+  next();
+}
 
 module.exports = authMiddleware;
