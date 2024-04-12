@@ -1,76 +1,66 @@
-const UpkeepStatus = require('../models/index').UpkeepStatus;
+const { UpkeepStatus } = require('../models');
 
-// Get all upkeep statuses
-exports.getAllUpkeepStatuses = async (req, res) => {
-    try {
-        const upkeepStatuses = await UpkeepStatus.find();
-        res.json(upkeepStatuses);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
-
-// Get a single upkeep status by ID
-exports.getUpkeepStatusById = async (req, res) => {
-    try {
-        const upkeepStatus = await UpkeepStatus.findById(req.params.id);
-        if (!upkeepStatus) {
-            return res.status(404).json({ message: 'Upkeep status not found' });
+const upkeepStatusController = {
+    createUpkeepStatus: async (req, res) => {
+        try {
+            const newUpkeepStatus = await UpkeepStatus.create(req.body);
+            res.status(201).json(newUpkeepStatus);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to create upkeepStatus' });
         }
-        res.json(upkeepStatus);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
+    },
 
-// Create a new upkeep status
-exports.createUpkeepStatus = async (req, res) => {
-    const upkeepStatus = new UpkeepStatus({
-        // Set the properties of the upkeep status based on the request body
-        // For example:
-        // name: req.body.name,
-        // description: req.body.description,
-    });
-
-    try {
-        const newUpkeepStatus = await upkeepStatus.save();
-        res.status(201).json(newUpkeepStatus);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-};
-
-// Update an existing upkeep status
-exports.updateUpkeepStatus = async (req, res) => {
-    try {
-        const upkeepStatus = await UpkeepStatus.findById(req.params.id);
-        if (!upkeepStatus) {
-            return res.status(404).json({ message: 'Upkeep status not found' });
+    getAllUpkeepStatus: async (req, res) => {
+        try {
+            const upkeepStatuses = await UpkeepStatus.findAll();
+            res.json(upkeepStatuses);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to get upkeepStatuses' });
         }
+    },
 
-        // Update the properties of the upkeep status based on the request body
-        // For example:
-        // upkeepStatus.name = req.body.name;
-        // upkeepStatus.description = req.body.description;
-
-        const updatedUpkeepStatus = await upkeepStatus.save();
-        res.json(updatedUpkeepStatus);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-};
-
-// Delete an upkeep status
-exports.deleteUpkeepStatus = async (req, res) => {
-    try {
-        const upkeepStatus = await UpkeepStatus.findById(req.params.id);
-        if (!upkeepStatus) {
-            return res.status(404).json({ message: 'Upkeep status not found' });
+    getUpkeepStatusById: async (req, res) => {
+        try {
+            const upkeepStatus = await UpkeepStatus.findByPk(req.params.id);
+            if (!upkeepStatus) {
+                return res.status(404).json({ error: 'UpkeepStatus not found' });
+            }
+            res.json(upkeepStatus);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to get upkeepStatus' });
         }
+    },
 
-        await upkeepStatus.remove();
-        res.json({ message: 'Upkeep status deleted' });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+    updateUpkeepStatus: async (req, res) => {
+        try {
+            const [updated] = await UpkeepStatus.update(req.body, {
+                where: { id: req.params.id }
+            });
+            if (updated) {
+                const updatedUpkeepStatus = await UpkeepStatus.findByPk(req.params.id);
+                res.json(updatedUpkeepStatus);
+            } else {
+                res.status(404).json({ error: 'UpkeepStatus not found' });
+            }
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to update upkeepStatus' });
+        }
+    },
+
+    deleteUpkeepStatus: async (req, res) => {
+        try {
+            const deleted = await UpkeepStatus.destroy({
+                where: { id: req.params.id }
+            });
+            if (deleted) {
+                res.json({ message: 'UpkeepStatus deleted successfully' });
+            } else {
+                res.status(404).json({ error: 'UpkeepStatus not found' });
+            }
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to delete upkeepStatus' });
+        }
     }
 };
+
+module.exports = upkeepStatusController;

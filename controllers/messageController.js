@@ -1,42 +1,27 @@
-const Message = require('../models/index').Message;
+const { Message } = require('../models');
 
-// Import the necessary modules and models
-
-// Controller methods for CRUD operations
 const messageController = {
-    // Create a new message
     createMessage: async (req, res) => {
         try {
-            const { street, city, state, country, postalCode } = req.body;
-            const newMessage = new Message({
-                street,
-
-                city,
-                state,
-                country,
-                postalCode
-            });
-            const savedMessage = await newMessage.save();
-            res.status(201).json(savedMessage);
+            const newMessage = await Message.create(req.body);
+            res.status(201).json(newMessage);
         } catch (error) {
             res.status(500).json({ error: 'Failed to create message' });
         }
     },
 
-    // Get all messagees
     getAllMessages: async (req, res) => {
         try {
-            const messagees = await Message.find();
-            res.json(messagees);
+            const messages = await Message.findAll();
+            res.json(messages);
         } catch (error) {
-            res.status(500).json({ error: 'Failed to get messagees' });
+            res.status(500).json({ error: 'Failed to get messages' });
         }
     },
 
-    // Get a single message by ID
     getMessageById: async (req, res) => {
         try {
-            const message = await Message.findById(req.params.id);
+            const message = await Message.findByPk(req.params.id);
             if (!message) {
                 return res.status(404).json({ error: 'Message not found' });
             }
@@ -46,38 +31,32 @@ const messageController = {
         }
     },
 
-    // Update an message by ID
     updateMessage: async (req, res) => {
         try {
-            const { street, city, state, country, postalCode } = req.body;
-            const updatedMessage = await Message.findByIdAndUpdate(
-                req.params.id,
-                {
-                    street,
-                    city,
-                    state,
-                    country,
-                    postalCode
-                },
-                { new: true }
-            );
-            if (!updatedMessage) {
-                return res.status(404).json({ error: 'Message not found' });
+            const [updated] = await Message.update(req.body, {
+                where: { id: req.params.id }
+            });
+            if (updated) {
+                const updatedMessage = await Message.findByPk(req.params.id);
+                res.json(updatedMessage);
+            } else {
+                res.status(404).json({ error: 'Message not found' });
             }
-            res.json(updatedMessage);
         } catch (error) {
             res.status(500).json({ error: 'Failed to update message' });
         }
     },
 
-    // Delete an message by ID
     deleteMessage: async (req, res) => {
         try {
-            const deletedMessage = await Message.findByIdAndDelete(req.params.id);
-            if (!deletedMessage) {
-                return res.status(404).json({ error: 'Message not found' });
+            const deleted = await Message.destroy({
+                where: { id: req.params.id }
+            });
+            if (deleted) {
+                res.json({ message: 'Message deleted successfully' });
+            } else {
+                res.status(404).json({ error: 'Message not found' });
             }
-            res.json(deletedMessage);
         } catch (error) {
             res.status(500).json({ error: 'Failed to delete message' });
         }
