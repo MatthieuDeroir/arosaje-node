@@ -6,11 +6,11 @@ class Login extends Model {}
 Login.init({
   ID: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   LAST_LOGIN: DataTypes.DATE,
-  ROLE_ID: DataTypes.INTEGER,
   EMAIL: DataTypes.STRING,
   HASHED_PASSWORD: DataTypes.STRING,
   CREATED_AT: DataTypes.DATE,
   UPDATED_AT: DataTypes.DATE,
 }, { sequelize, modelName: 'Login' });
+
 
 module.exports = Login;

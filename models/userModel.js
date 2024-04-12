@@ -1,7 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../database/sequelize');
 
-
 class User extends Model {}
 
 User.init({
@@ -12,12 +11,38 @@ User.init({
   BIRTH_DATE: DataTypes.DATEONLY,
   LAST_GPS_LOCALIZATION: DataTypes.STRING,
   LAST_GPS_LOCALIZATION_TIMESTAMP: DataTypes.DATE,
-  ADDRESS_ID: DataTypes.INTEGER,
-  LOGIN_ID: DataTypes.INTEGER,
-  ROLE_ID: DataTypes.INTEGER,
-  PROFILE_PICTURE_ID: DataTypes.INTEGER,
+  ADDRESS_ID: {
+    type:DataTypes.INTEGER,
+    references: {
+      model: 'Address',
+      key: 'ID'
+    }
+  },
+  LOGIN_ID: {
+    type:DataTypes.INTEGER,
+    references: {
+      model: 'Login',
+      key: 'ID'
+    }
+  },
+  ROLE_ID: {
+    type:DataTypes.INTEGER,
+    references: {
+      model: 'Role',
+      key: 'ID'
+    }
+  
+  },
+  PROFILE_PICTURE_ID: {
+    type:DataTypes.INTEGER,
+    references: {
+      model: 'Media',
+      key: 'ID'
+    }
+  },
   CREATED_AT: DataTypes.DATE,
   UPDATED_AT: DataTypes.DATE,
 }, { sequelize, modelName: 'User' });
+
 
 module.exports = User;

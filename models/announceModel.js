@@ -6,8 +6,22 @@ class Announce extends Model {}
 
 Announce.init({
   ID: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  ANNOUNCER_ID: DataTypes.INTEGER,
-  PLANT_ID: DataTypes.INTEGER,
+  ANNOUNCER_ID: 
+  {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'User',
+      key: 'ID'
+    }
+  },
+  UPKEEP_ID: 
+  {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'Upkeep',
+      key: 'ID'
+    }
+  },
   TITLE: DataTypes.STRING,
   BODY: DataTypes.TEXT,
   START_DATE: DataTypes.DATEONLY,
