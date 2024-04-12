@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { User, Login, Role } = require('./models');
+const { User, Login, Role } = require('../models');
 const dotenv = require('dotenv');
 const saltRounds = 10;
 dotenv.config();
@@ -88,4 +88,29 @@ function verifyToken(token) {
     }
   }
 
-module.exports = { register, login, verifyToken };
+  /**
+   * Logs out a user by updating the last login timestamp in the database.
+   */
+
+  async function logout(token) {
+    const decoded = jwt.decode(token);
+    if (!decoded || !decoded.id) {
+      throw new Error('Invalid token');
+    }
+  
+    const login = await Login.findOne({
+      where: { ID: decoded.id }
+    });
+  
+    if (!login) {
+      throw new Error('Login record not found');
+    }
+  
+    login.LAST_LOGIN = new Date();
+    await login.save();
+  
+    return { message: 'User logged out successfully' };
+  }
+  
+
+module.exports = { register, login, verifyToken, getUserIdFromToken, logout};

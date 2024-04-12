@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/', upkeepStatusController.createUpkeepStatus);
 
 // Get all upkeep statuses
-router.get('/', upkeepStatusController.getAllUpkeepStatuses);
+router.get('/', upkeepStatusController.getAllUpkeepStatus);
 
 // Get a specific upkeep status by ID
 router.get('/:id', upkeepStatusController.getUpkeepStatusById);

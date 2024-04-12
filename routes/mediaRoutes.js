@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/', mediaController.createMedia);
 
 // Get all media
-router.get('/', mediaController.getAllMedia);
+router.get('/', mediaController.getAllMedias);
 
 // Get a specific media by ID
 router.get('/:id', mediaController.getMediaById);

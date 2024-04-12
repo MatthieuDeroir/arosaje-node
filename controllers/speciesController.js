@@ -1,7 +1,7 @@
 const Species = require('../models/index').Species;
 
 const speciesController = {
-    create: async (req, res) => {
+    createSpecies: async (req, res) => {
         try {
             const newSpecies = await Species.create(req.body);
             res.status(201).json(newSpecies);
@@ -10,7 +10,7 @@ const speciesController = {
         }
     },
 
-    getAll: async (req, res) => {
+    getAllSpecies: async (req, res) => {
         try {
             const speciesList = await Species.findAll();
             res.json(speciesList);
@@ -19,7 +19,7 @@ const speciesController = {
         }
     },
 
-    getById: async (req, res) => {
+    getSpeciesById: async (req, res) => {
         try {
             const species = await Species.findByPk(req.params.id);
             if (!species) {
@@ -32,7 +32,7 @@ const speciesController = {
         }
     },
 
-    updateById: async (req, res) => {
+    updateSpecies: async (req, res) => {
         try {
             const [updated] = await Species.update(req.body, { where: { id: req.params.id } });
             if (!updated) {
@@ -46,7 +46,7 @@ const speciesController = {
         }
     },
 
-    deleteById: async (req, res) => {
+    deleteSpecies: async (req, res) => {
         try {
             const deleted = await Species.destroy({ where: { id: req.params.id } });
             if (!deleted) {

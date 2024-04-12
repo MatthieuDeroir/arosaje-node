@@ -1,7 +1,7 @@
 const { Plant } = require('../models');
 
 const plantController = {
-    create: async (req, res) => {
+    createPlant: async (req, res) => {
         try {
             const newPlant = await Plant.create(req.body);
             res.status(201).json(newPlant);
@@ -10,7 +10,7 @@ const plantController = {
         }
     },
 
-    getAll: async (req, res) => {
+    getAllPlants: async (req, res) => {
         try {
             const plants = await Plant.findAll();
             res.json(plants);
@@ -19,7 +19,7 @@ const plantController = {
         }
     },
 
-    getById: async (req, res) => {
+    getPlantById: async (req, res) => {
         try {
             const plant = await Plant.findByPk(req.params.id);
             if (!plant) {
@@ -31,7 +31,7 @@ const plantController = {
         }
     },
 
-    updateById: async (req, res) => {
+    updatePlant: async (req, res) => {
         try {
             const [updated] = await Plant.update(req.body, {
                 where: { id: req.params.id }
@@ -47,7 +47,7 @@ const plantController = {
         }
     },
 
-    deleteById: async (req, res) => {
+    deletePlant: async (req, res) => {
         try {
             const deleted = await Plant.destroy({
                 where: { id: req.params.id }

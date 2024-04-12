@@ -13,6 +13,7 @@ const userController = {
     getAllUsers: async (req, res) => {
         try {
             const users = await User.findAll();
+            console.log(users);
             res.json(users);
         } catch (error) {
             res.status(500).json({ error: 'Failed to get users' });

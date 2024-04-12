@@ -1,5 +1,6 @@
 const addressRoutes = require('./addressRoutes');
 const announceRoutes = require('./announceRoutes');
+const authRoutes = require('./authRoutes');
 const commentRoutes = require('./commentRoutes');
 const conversationParticipantRoutes = require('./conversationParticipantRoutes');
 const conversationRoutes = require('./conversationRoutes');
@@ -17,6 +18,7 @@ const userRoutes = require('./userRoutes');
 module.exports = {
     Address: addressRoutes,
     Announce: announceRoutes,
+    Auth: authRoutes,
     Comment: commentRoutes,
     ConversationParticipant: conversationParticipantRoutes,
     Conversation: conversationRoutes,

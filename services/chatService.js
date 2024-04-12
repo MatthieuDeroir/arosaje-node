@@ -26,9 +26,8 @@ const registerUser = (userId, ws) => {
 const sendMessage = async (userId, targetUserId, message) => {
     try {
         // Check if the target user exists
-        const target
-        User
-        = await User.findById(targetUserId);
+         target,
+         User = await User.findById(targetUserId);
         if (!targetUser) {
             return 'User not found';
         }
