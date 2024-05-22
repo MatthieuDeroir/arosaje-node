@@ -1,0 +1,163 @@
+openapi: 3.0.3
+info:
+  title: Arosaje API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/medias
+tags:
+    - name: File Upload
+      description: Operations about file uploads
+paths:
+  /upload/plant:
+    post:
+      tags:
+        - File Upload
+      summary: Upload a file for a plant
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                entityId:
+                  type: integer
+                userId:
+                  type: integer
+              required:
+                - file
+                - entityId
+                - userId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: http://localhost:8080/download/filename.jpg
+  /upload/user:
+    post:
+      tags:
+        - File Upload
+      summary: Upload a file for a user
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                entityId:
+                  type: integer
+                userId:
+                  type: integer
+              required:
+                - file
+                - entityId
+                - userId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: http://localhost:8080/download/filename.jpg
+  /upload/announcement:
+    post:
+      tags:
+        - File Upload
+      summary: Upload a file for an announcement
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                entityId:
+                  type: integer
+                userId:
+                  type: integer
+              required:
+                - file
+                - entityId
+                - userId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: http://localhost:8080/download/filename.jpg
+  /upload/message:
+    post:
+      tags:
+        - File Upload
+      summary: Upload a file for a message
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                entityId:
+                  type: integer
+                userId:
+                  type: integer
+              required:
+                - file
+                - entityId
+                - userId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: http://localhost:8080/download/filename.jpg
+  /upload/upkeep:
+    post:
+      tags:
+        - File Upload
+      summary: Upload a file for an upkeep
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                entityId:
+                  type: integer
+                userId:
+                  type: integer
+              required:
+                - file
+                - entityId
+                - userId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: http://localhost:8080/download/filename.jpg
+components:
+  schemas:
+  

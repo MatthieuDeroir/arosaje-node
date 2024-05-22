@@ -1,0 +1,150 @@
+openapi: 3.0.3
+info:
+  title: Arosaje API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/plant
+
+tags:
+  - name: plant
+    description: Operations about plants
+
+paths:
+  /plants:
+    get:
+      tags:
+        - plant
+      summary: Récupère toutes les plantes
+      description: Récupère la liste de toutes les plantes
+      responses:
+        '200':
+          description: Liste des plantes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Plant'
+    post:
+      tags:
+        - plant
+      summary: Ajoute une nouvelle plante
+      description: Ajoute une nouvelle plante
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Plant'
+        required: true
+      responses:
+        '200':
+          description: Plante ajoutée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plant'
+    put:
+      tags:
+        - plant
+      summary: Met à jour une plante
+      description: Met à jour une plante
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Plant'
+        required: true
+      responses:
+        '200':
+          description: Plante mise à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plant'
+  /plants/{id}:
+    get:
+      tags:
+        - plant
+      summary: Récupère une plante par son ID
+      description: Récupère une plante par son ID
+      parameters:
+        - name: id
+          in: path
+          description: ID de la plante
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Plante trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plant'
+    delete:
+      tags:
+        - plant
+      summary: Supprime une plante par son ID
+      description: Supprime une plante par son ID
+      parameters:
+        - name: id
+          in: path
+          description: ID de la plante
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Plante supprimée
+  /findByOwnerId/{ownerId}:
+    get:
+      tags:
+        - plant
+      summary: Récupère toutes les plantes d'un propriétaire
+      description: Récupère toutes les plantes d'un propriétaire
+      parameters:
+        - name: ownerId
+          in: path
+          description: ID du propriétaire
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Liste des plantes du propriétaire
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Plant'
+
+components:
+  schemas:
+    Plant:
+      type: object
+      properties:
+        Id:
+          type: integer
+          example: 1
+        ownerId:
+          type: integer
+          example: 5
+        speciesId:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Ficus"
+        description:
+          type: string
+          example: "Plante verte"
+        currentState:
+          type: string
+          example: "En bonne santé"
+        createdAt:
+          type: string
+          example: "2021-01-01"
+        updatedAt:
+          type: string
+          example: "2021-01-01"
