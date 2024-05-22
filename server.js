@@ -29,7 +29,7 @@ app.listen(port, () => {
 
 app.use('/api/addresses', Routes.Address);
 app.use('/api/announces', Routes.Announce);
-app.use('/api/auths', Routes.Auth);
+app.use('/api/auth', Routes.Auth);
 app.use('/api/comments', Routes.Comment);
 app.use('/api/conversations', Routes.Conversation);
 app.use('/api/logins', Routes.Login);
