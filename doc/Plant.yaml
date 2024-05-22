@@ -1,150 +1,131 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
   title: Arosaje API
   version: 1.0.0
-servers:
-  - url: http://localhost:8080/api/plant
 
-tags:
-  - name: plant
-    description: Operations about plants
+servers:
+  - url: http://localhost:4000/api/plants
 
 paths:
   /plants:
+    post:
+      summary: Create a new plant
+      tags: [Plant]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Plant'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plant'
+        '500':
+          description: Failed to create plant
+
     get:
-      tags:
-        - plant
-      summary: Récupère toutes les plantes
-      description: Récupère la liste de toutes les plantes
+      summary: Get all plants
+      tags: [Plant]
       responses:
         '200':
-          description: Liste des plantes
+          description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Plant'
-    post:
-      tags:
-        - plant
-      summary: Ajoute une nouvelle plante
-      description: Ajoute une nouvelle plante
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Plant'
-        required: true
-      responses:
-        '200':
-          description: Plante ajoutée
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Plant'
-    put:
-      tags:
-        - plant
-      summary: Met à jour une plante
-      description: Met à jour une plante
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Plant'
-        required: true
-      responses:
-        '200':
-          description: Plante mise à jour
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Plant'
+        '500':
+          description: Failed to get plants
+
   /plants/{id}:
     get:
-      tags:
-        - plant
-      summary: Récupère une plante par son ID
-      description: Récupère une plante par son ID
+      summary: Get a plant by ID
+      tags: [Plant]
       parameters:
-        - name: id
-          in: path
-          description: ID de la plante
-          required: true
+        - in: path
+          name: id
           schema:
             type: integer
+          required: true
       responses:
         '200':
-          description: Plante trouvée
+          description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Plant'
-    delete:
-      tags:
-        - plant
-      summary: Supprime une plante par son ID
-      description: Supprime une plante par son ID
+        '404':
+          description: Plant not found
+        '500':
+          description: Failed to get plant
+
+    put:
+      summary: Update a plant
+      tags: [Plant]
       parameters:
-        - name: id
-          in: path
-          description: ID de la plante
-          required: true
+        - in: path
+          name: id
           schema:
             type: integer
-      responses:
-        '200':
-          description: Plante supprimée
-  /findByOwnerId/{ownerId}:
-    get:
-      tags:
-        - plant
-      summary: Récupère toutes les plantes d'un propriétaire
-      description: Récupère toutes les plantes d'un propriétaire
-      parameters:
-        - name: ownerId
-          in: path
-          description: ID du propriétaire
           required: true
-          schema:
-            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Plant'
       responses:
         '200':
-          description: Liste des plantes du propriétaire
+          description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Plant'
+                $ref: '#/components/schemas/Plant'
+        '404':
+          description: Plant not found
+        '500':
+          description: Failed to update plant
+
+    delete:
+      summary: Delete a plant
+      tags: [Plant]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Plant deleted successfully
+        '404':
+          description: Plant not found
+        '500':
+          description: Failed to delete plant
 
 components:
   schemas:
     Plant:
       type: object
       properties:
-        Id:
+        ID:
           type: integer
-          example: 1
-        ownerId:
+          readOnly: true
+        OWNER_ID:
           type: integer
-          example: 5
-        speciesId:
+        SPECIES_ID:
           type: integer
-          example: 1
-        name:
+        CREATED_AT:
           type: string
-          example: "Ficus"
-        description:
+          format: date
+          readOnly: true
+        UPDATED_AT:
           type: string
-          example: "Plante verte"
-        currentState:
-          type: string
-          example: "En bonne santé"
-        createdAt:
-          type: string
-          example: "2021-01-01"
-        updatedAt:
-          type: string
-          example: "2021-01-01"
+          format: date
+          readOnly: true
+      required:
+        - OWNER_ID
+        - SPECIES_ID
