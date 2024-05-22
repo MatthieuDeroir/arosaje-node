@@ -10,7 +10,7 @@ Announce.init({
   {
     type: DataTypes.INTEGER,
     references: {
-      model: 'User',
+      model: 'Users',
       key: 'ID'
     }
   },
@@ -18,7 +18,7 @@ Announce.init({
   {
     type: DataTypes.INTEGER,
     references: {
-      model: 'Upkeep',
+      model: 'Upkeeps',
       key: 'ID'
     }
   },
@@ -28,6 +28,6 @@ Announce.init({
   END_DATE: DataTypes.DATEONLY,
   CREATED_AT: DataTypes.DATE,
   UPDATED_AT: DataTypes.DATE,
-}, { sequelize, modelName: 'Announce' });
+}, { sequelize, modelName: 'Announces' });
 
 module.exports = Announce;

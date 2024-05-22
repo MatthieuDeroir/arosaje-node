@@ -1,4 +1,7 @@
 const WebSocket = require('ws');
+const Conversation = require('../models').Conversation;
+const ConversationParticipant = require('../models').ConversationParticipant;
+const Message = require('../models').Message;
 
 // Create a WebSocket server
 const wss = new WebSocket.Server({ port: 8080 });
@@ -8,18 +11,17 @@ const users = {};
 
 // Event listener for when a client connects
 wss.on('connection', (ws) => {
-    // Event listener for when a message is received from a client
-    ws.on('message', (message) => {
+    ws.on('message', async (message) => {
         const parsedMessage = JSON.parse(message);
 
-        // If the message has a type of 'register', register the user
+        // Handle registration
         if (parsedMessage.type === 'register') {
             console.log('User registered:', parsedMessage.userId);
             users[parsedMessage.userId] = ws;
             return;
         }
 
-        // If the message has a type of 'message', send it to the specified user
+        // Handle messaging
         if (parsedMessage.type === 'message') {
             const targetUser = users[parsedMessage.targetUserId];
             if (targetUser) {
@@ -28,14 +30,34 @@ wss.on('connection', (ws) => {
                     from: parsedMessage.userId,
                     message: parsedMessage.message
                 }));
+
+                // Create or retrieve conversation between users
+                const [conversation, created] = await Conversation.findOrCreate({
+                    where: { /* condition to identify the conversation */ }
+                });
+
+                // Add participants to conversation if needed
+                const sender = await ConversationParticipant.findOrCreate({
+                    where: { CONVERSATION_ID: conversation.ID, USER_ID: parsedMessage.userId }
+                });
+                const receiver = await ConversationParticipant.findOrCreate({
+                    where: { CONVERSATION_ID: conversation.ID, USER_ID: parsedMessage.targetUserId }
+                });
+
+                // Store the message
+                await Message.create({
+                    CONVERSATION_PARTICIPANT_ID: sender[0].ID,
+                    BODY: parsedMessage.message,
+                    CREATED_AT: new Date(),
+                    UPDATED_AT: new Date()
+                });
             }
             return;
         }
     });
 
-    // Event listener for when a client disconnects
     ws.on('close', () => {
-        // Remove the user from the users object
+        // Clean up users object
         for (let userId in users) {
             if (users[userId] === ws) {
                 delete users[userId];

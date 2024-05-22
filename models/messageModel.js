@@ -10,6 +10,6 @@ Message.init({
   BODY: DataTypes.TEXT,
   CREATED_AT: DataTypes.DATE,
   UPDATED_AT: DataTypes.DATE,
-}, { sequelize, modelName: 'Message' });
+}, { sequelize, modelName: 'Messages' });
 
 module.exports = Message;

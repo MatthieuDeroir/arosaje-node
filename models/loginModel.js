@@ -10,7 +10,7 @@ Login.init({
   HASHED_PASSWORD: DataTypes.STRING,
   CREATED_AT: DataTypes.DATE,
   UPDATED_AT: DataTypes.DATE,
-}, { sequelize, modelName: 'Login' });
+}, { sequelize, modelName: 'Logins' });
 
 
 module.exports = Login;

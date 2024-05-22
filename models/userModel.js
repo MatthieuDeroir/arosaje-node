@@ -14,21 +14,21 @@ User.init({
   ADDRESS_ID: {
     type:DataTypes.INTEGER,
     references: {
-      model: 'Address',
+      model: 'Addresses',
       key: 'ID'
     }
   },
   LOGIN_ID: {
     type:DataTypes.INTEGER,
     references: {
-      model: 'Login',
+      model: 'Logins',
       key: 'ID'
     }
   },
   ROLE_ID: {
     type:DataTypes.INTEGER,
     references: {
-      model: 'Role',
+      model: 'Roles',
       key: 'ID'
     }
   
@@ -36,13 +36,13 @@ User.init({
   PROFILE_PICTURE_ID: {
     type:DataTypes.INTEGER,
     references: {
-      model: 'Media',
+      model: 'Medias',
       key: 'ID'
     }
   },
   CREATED_AT: DataTypes.DATE,
   UPDATED_AT: DataTypes.DATE,
-}, { sequelize, modelName: 'User' });
+}, { sequelize, modelName: 'Users' });
 
 
 module.exports = User;

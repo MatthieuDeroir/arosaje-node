@@ -7,6 +7,6 @@ class Role extends Model {}
 Role.init({
   ID: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   DESCRIPTION: DataTypes.STRING,
-}, { sequelize, modelName: 'Role' });
+}, { sequelize, modelName: 'Roles' });
 
 module.exports = Role;

@@ -10,6 +10,6 @@ ConversationParticipant.init({
   USER_ID: DataTypes.INTEGER,
   CREATED_AT: DataTypes.DATE,
   UPDATED_AT: DataTypes.DATE,
-}, { sequelize, modelName: 'ConversationParticipant' });
+}, { sequelize, modelName: 'ConversationParticipants' });
 
 module.exports = ConversationParticipant;

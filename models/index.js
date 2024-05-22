@@ -13,109 +13,88 @@ const UpkeepModel = require('./upkeepModel');
 const UpkeepStatusModel = require('./upkeepStatusModel');
 const UserModel = require('./userModel');
 
-
+// First, create the tables that don't have any dependencies
+RoleModel.sync()
+.then(() => UserModel.sync())
+.then(() => UpkeepStatusModel.sync())
+.then(() => UpkeepModel.sync())
+.then(() => SpeciesModel.sync())
+.then(() => PlantModel.sync())
+.then(() => MediaModel.sync())
+.then(() => MessageModel.sync())
+// Then, create the tables that depend on the ones created above
+.then(() => AnnounceModel.sync())
+.then(() => CommentModel.sync())
+.then(() => ConversationModel.sync())
+.then(() => ConversationParticipantModel.sync())
+.catch((error) => {
+    console.error('Error syncing models:', error);
+});
 // Define relationships
 
-// Announce
-AnnounceModel.hasOne(UserModel, {
-    foreignKey: 'ANNOUNCER_ID',
-    as: 'Announcer'
-});
-UserModel.hasMany(AnnounceModel, {
-    foreignKey: 'ANNOUNCER_ID',
-    as: 'Announces'
-});
-AnnounceModel.hasOne(UpkeepModel, {
-    foreignKey: 'UPKEEP_ID',
-    as: 'Upkeep'
-});
-UpkeepModel.hasMany(AnnounceModel, {
-    foreignKey: 'UPKEEP_ID',
-    as: 'Announces'
-});
 
-// Comment
-CommentModel.hasOne(UserModel, {
-    foreignKey: 'USER_ID',
-    as: 'User'
-});
-UserModel.hasMany(CommentModel, {
-    foreignKey: 'USER_ID',
-    as: 'Comments'
-});
+// User has one Address
+UserModel.belongsTo(AddressModel, { foreignKey: 'ADDRESS_ID' });
+AddressModel.hasOne(UserModel, { foreignKey: 'ADDRESS_ID' });
 
-// ConversationParticipant
-ConversationParticipantModel.hasOne(UserModel, {
-    foreignKey: 'USER_ID',
-    as: 'User'
-});
-UserModel.hasMany(ConversationParticipantModel, {
-    foreignKey: 'USER_ID',
-    as: 'ConversationParticipants'
-});
-ConversationParticipantModel.hasOne(ConversationModel, {
-    foreignKey: 'CONVERSATION_ID',
-    as: 'Conversation'
-});
-ConversationModel.hasMany(ConversationParticipantModel, {
-    foreignKey: 'CONVERSATION_ID',
-    as: 'ConversationParticipants'
-});
+// User has one Login
+UserModel.belongsTo(LoginModel, { foreignKey: 'LOGIN_ID' });
+LoginModel.hasOne(UserModel, { foreignKey: 'LOGIN_ID' });
 
-// Media
-MediaModel.hasOne(UserModel, {
-    foreignKey: 'USER_ID',
-    as: 'User'
-});
-UserModel.hasMany(MediaModel, {
-    foreignKey: 'USER_ID',
-    as: 'Medias'
-});
+// User has one Role
+UserModel.belongsTo(RoleModel, { foreignKey: 'ROLE_ID' });
+RoleModel.hasMany(UserModel, { foreignKey: 'ROLE_ID' });
 
-// Message
-MessageModel.hasOne(UserModel, {
-    foreignKey: 'USER_ID',
-    as: 'User'
-});
-UserModel.hasMany(MessageModel, {
-    foreignKey: 'USER_ID',
-    as: 'Messages'
-});
-
-// Plant
-PlantModel.hasOne(SpeciesModel, {
-    foreignKey: 'SPECIES_ID',
-    as: 'Species'
-});
-SpeciesModel.hasMany(PlantModel, {
-    foreignKey: 'SPECIES_ID',
-    as: 'Plants'
-});
-PlantModel.hasOne(UserModel, {
-    foreignKey: 'OWNER_ID',
-    as: 'User'
-});
-UserModel.hasMany(PlantModel, {
-    foreignKey: 'OWNER_ID',
-    as: 'Plants'
-});
-
-// Role
-RoleModel.hasOne(UserModel, {
-    foreignKey: 'ROLE_ID',
-    as: 'User'
-});
+// User has one Profile Picture
+UserModel.belongsTo(MediaModel, { foreignKey: 'PROFILE_PICTURE_ID' });
+MediaModel.hasOne(UserModel, { foreignKey: 'PROFILE_PICTURE_ID' });
 
 
-// User
-UserModel.hasOne(LoginModel, {
-    foreignKey: 'LOGIN_ID',
-    as: 'Login'
-  });
-LoginModel.belongsTo(UserModel, {
-    foreignKey: 'LOGIN_ID',
-    as: 'User'
-});
+// User has many Media, PLants and Upkeeps
+UserModel.hasMany(MediaModel, { foreignKey: 'USER_ID' });
+MediaModel.belongsTo(UserModel, { foreignKey: 'USER_ID' });
+UserModel.hasMany(PlantModel, { foreignKey: 'OWNER_ID' });
+PlantModel.belongsTo(UserModel, { foreignKey: 'OWNER_ID' });
+UserModel.hasMany(UpkeepModel, { foreignKey: 'USER_ID' });
+UpkeepModel.belongsTo(UserModel, { foreignKey: 'USER_ID' });
+
+
+// Plant has one Species
+PlantModel.belongsTo(SpeciesModel, { foreignKey: 'SPECIES_ID' });
+SpeciesModel.hasMany(PlantModel, { foreignKey: 'SPECIES_ID' });
+
+// Plant has many Upkeeps
+UpkeepModel.belongsTo(PlantModel, { foreignKey: 'PLANT_ID' });
+PlantModel.hasMany(UpkeepModel, { foreignKey: 'PLANT_ID' });
+
+
+// Upkeep has one UpkeepStatus
+UpkeepModel.belongsTo(UpkeepStatusModel, { foreignKey: 'UPKEEP_STATUS_ID' });
+UpkeepStatusModel.hasMany(UpkeepModel, { foreignKey: 'UPKEEP_STATUS_ID' });
+
+// Announce has one User
+// AnnounceModel.belongsTo(UserModel, { foreignKey: 'ANNOUNCER_ID' });
+
+
+CommentModel.belongsTo(UserModel, { foreignKey: 'USER_ID' });
+
+
+ConversationModel.hasMany(ConversationParticipantModel, { foreignKey: 'CONVERSATION_ID' });
+ConversationParticipantModel.belongsTo(ConversationModel, { foreignKey: 'CONVERSATION_ID' });
+
+MessageModel.belongsTo(ConversationParticipantModel, { foreignKey: 'CONVERSATION_PARTICIPANT_ID' });
+ConversationParticipantModel.hasMany(MessageModel, { foreignKey: 'CONVERSATION_PARTICIPANT_ID' });
+
+
+
+
+
+
+
+
+
+
+
 
 
 module.exports = {

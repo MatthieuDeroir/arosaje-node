@@ -13,6 +13,6 @@ Media.init({
   HASHED_NAME: DataTypes.STRING,
   CREATED_AT: DataTypes.DATE,
   UPDATED_AT: DataTypes.DATE,
-}, { sequelize, modelName: 'Media' });
+}, { sequelize, modelName: 'Medias' });
 
 module.exports = Media;

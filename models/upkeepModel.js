@@ -14,6 +14,6 @@ Upkeep.init({
   END_DATE: DataTypes.DATEONLY,
   CREATED_AT: DataTypes.DATE,
   UPDATED_AT: DataTypes.DATE,
-}, { sequelize, modelName: 'Upkeep' });
+}, { sequelize, modelName: 'Upkeeps' });
 
 module.exports = Upkeep;

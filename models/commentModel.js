@@ -10,6 +10,6 @@ Comment.init({
   BODY: DataTypes.TEXT,
   CREATED_AT: DataTypes.DATE,
   UPDATED_AT: DataTypes.DATE,
-}, { sequelize, modelName: 'Comment' });
+}, { sequelize, modelName: 'Comments' });
 
 module.exports = Comment;
