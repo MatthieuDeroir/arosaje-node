@@ -2,7 +2,6 @@ const AddressModel = require('./addressModel');
 const AnnounceModel = require('./announceModel');
 const CommentModel = require('./commentModel');
 const ConversationModel = require('./conversationModel');
-const ConversationParticipantModel = require('./conversationParticipantModel');
 const LoginModel = require('./loginModel');
 const MediaModel = require('./mediaModel');
 const MessageModel = require('./messageModel');
@@ -26,7 +25,6 @@ RoleModel.sync()
 .then(() => AnnounceModel.sync())
 .then(() => CommentModel.sync())
 .then(() => ConversationModel.sync())
-.then(() => ConversationParticipantModel.sync())
 .catch((error) => {
     console.error('Error syncing models:', error);
 });
@@ -79,11 +77,7 @@ UpkeepStatusModel.hasMany(UpkeepModel, { foreignKey: 'UPKEEP_STATUS_ID' });
 CommentModel.belongsTo(UserModel, { foreignKey: 'USER_ID' });
 
 
-ConversationModel.hasMany(ConversationParticipantModel, { foreignKey: 'CONVERSATION_ID' });
-ConversationParticipantModel.belongsTo(ConversationModel, { foreignKey: 'CONVERSATION_ID' });
 
-MessageModel.belongsTo(ConversationParticipantModel, { foreignKey: 'CONVERSATION_PARTICIPANT_ID' });
-ConversationParticipantModel.hasMany(MessageModel, { foreignKey: 'CONVERSATION_PARTICIPANT_ID' });
 
 
 
@@ -102,7 +96,6 @@ module.exports = {
     Announce : AnnounceModel,
     Comment : CommentModel,
     Conversation : ConversationModel,
-    ConversationParticipant : ConversationParticipantModel,
     Login : LoginModel,
     Media : MediaModel,
     Message : MessageModel,

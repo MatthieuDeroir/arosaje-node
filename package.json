@@ -5,6 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
+    "dev": "dotenv -e .env.development node server.js",
+    "prod": "dotenv -e .env.production node server.js",
     "start": "node server.js"
   },
   "jest": {
@@ -26,6 +28,7 @@
     "pg-hstore": "^2.3.4",
     "pnpm": "^8.15.6",
     "sequelize": "^6.37.2",
+    "sqlite3": "^5.1.7",
     "ws": "^8.16.0"
   }
 }

@@ -10,7 +10,7 @@ const express = require('express');
 const app = express();
 const port = 4000;
 
-sequelize.sync({ force: false });
+// sequelize.sync({ force: false });
 
 
 app.use(cors());
@@ -27,18 +27,17 @@ app.listen(port, () => {
 );
 
 
-app.use('/api/address', Routes.Address);
-app.use('/api/announce', Routes.Announce);
-app.use('/api/auth', Routes.Auth);
-app.use('/api/comment', Routes.Comment);
-app.use('/api/conversationParticipant', Routes.ConversationParticipant);
-app.use('/api/conversation', Routes.Conversation);
-app.use('/api/login', Routes.Login);
-app.use('/api/media', Routes.Media);
-app.use('/api/message', Routes.Message);
-app.use('/api/plant', Routes.Plant);
-app.use('/api/role', Routes.Role);
+app.use('/api/addresses', Routes.Address);
+app.use('/api/announces', Routes.Announce);
+app.use('/api/auths', Routes.Auth);
+app.use('/api/comments', Routes.Comment);
+app.use('/api/conversations', Routes.Conversation);
+app.use('/api/logins', Routes.Login);
+app.use('/api/medias', Routes.Media);
+app.use('/api/messages', Routes.Message);
+app.use('/api/plants', Routes.Plant);
+app.use('/api/roles', Routes.Role);
 app.use('/api/species', Routes.Species);
-app.use('/api/upkeep', Routes.Upkeep);
+app.use('/api/upkeeps', Routes.Upkeep);
 app.use('/api/upkeepStatus', Routes.UpkeepStatus);
-app.use('/api/user', Routes.User);
+app.use('/api/users', Routes.User);
