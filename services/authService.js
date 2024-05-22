@@ -27,6 +27,7 @@ async function register({ username, firstName, lastName, birthDate, email, passw
     LAST_NAME: lastName,
     BIRTH_DATE: birthDate,
     LOGIN_ID: login.ID,
+
     ROLE_ID: roleId,
     CREATED_AT: new Date(),
     UPDATED_AT: new Date()

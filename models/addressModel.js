@@ -12,6 +12,6 @@ class Address extends Model {}
         COUNTRY: DataTypes.STRING,
         LATITUDE: DataTypes.DECIMAL(10, 8),
         LONGITUDE: DataTypes.DECIMAL(11, 8),
-    },{ sequelize, modelName: 'Announces' });
+    },{ sequelize, modelName: 'Adress' });
 
 module.exports = Address;

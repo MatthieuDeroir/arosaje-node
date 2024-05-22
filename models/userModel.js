@@ -11,13 +11,13 @@ User.init({
   BIRTH_DATE: DataTypes.DATEONLY,
   LAST_GPS_LOCALIZATION: DataTypes.STRING,
   LAST_GPS_LOCALIZATION_TIMESTAMP: DataTypes.DATE,
-  ADDRESS_ID: {
-    type:DataTypes.INTEGER,
-    references: {
-      model: 'Addresses',
-      key: 'ID'
-    }
-  },
+  // ADDRESS_ID: {
+  //   type:DataTypes.INTEGER,
+  //   references: {
+  //     model: 'Adress',
+  //     key: 'ID'
+  //   }
+  // },
   LOGIN_ID: {
     type:DataTypes.INTEGER,
     references: {
