@@ -1,0 +1,155 @@
+openapi: 3.0.0
+info:
+  title: AROSAJE API
+  description: An API for data of Arosaje Application
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:4000/api
+
+paths:
+  /messages:
+    post:
+      tags: [Messages]
+      summary: Create a new message
+      description: Creates a new message and returns it
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '500':
+          description: Failed to create message
+
+    get:
+      tags: [Messages]
+      summary: Get all messages
+      description: Returns a list of all messages
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '500':
+          description: Failed to get messages
+
+  /messages/{id}:
+    get:
+      tags: [Messages]
+      summary: Get message by ID
+      description: Returns the message with the specified ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the message to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: Message not found
+        '500':
+          description: Failed to get message
+
+    put:
+      tags: [Messages]
+      summary: Update message
+      description: Updates the message with the specified ID and returns it
+      parameters:
+        - name: id
+          in: path
+          description: ID of the message to update
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: Message not found
+        '500':
+          description: Failed to update message
+
+    delete:
+      tags: [Messages]
+      summary: Delete message
+      description: Deletes the message with the specified ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the message to delete
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Message deleted successfully'
+        '404':
+          description: Message not found
+        '500':
+          description: Failed to delete message
+
+components:
+  schemas:
+    Message:
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: int64
+          readOnly: true
+          example: 1
+        CONVERSATION_PARTICIPANT_ID:
+          type: integer
+          example: 1
+        BODY:
+          type: string
+          example: "This is a message."
+        CREATED_AT:
+          type: string
+          format: date-time
+          example: "2023-05-25T10:30:00Z"
+        UPDATED_AT:
+          type: string
+          format: date-time
+          example: "2023-05-25T10:45:00Z"
+      required:
+        - CONVERSATION_PARTICIPANT_ID
+        - BODY

@@ -1,0 +1,159 @@
+openapi: 3.0.0
+info:
+  title: AROSAJE API
+  description: An API for data of Arosaje Application
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:4000/api
+
+paths:
+  /logins:
+    post:
+      tags: [Login]
+      summary: Create a new login
+      description: Creates a new login and returns it
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+        '500':
+          description: Failed to create login
+
+    get:
+      tags: [Login]
+      summary: Get all logins
+      description: Returns a list of all logins
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Login'
+        '500':
+          description: Failed to get logins
+
+  /logins/{id}:
+    get:
+      tags: [Login]
+      summary: Get login by ID
+      description: Returns the login with the specified ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the login to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+        '404':
+          description: Login not found
+        '500':
+          description: Failed to get login
+
+    put:
+      tags: [Login]
+      summary: Update login
+      description: Updates the login with the specified ID and returns it
+      parameters:
+        - name: id
+          in: path
+          description: ID of the login to update
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+        '404':
+          description: Login not found
+        '500':
+          description: Failed to update login
+
+    delete:
+      tags: [Login]
+      summary: Delete login
+      description: Deletes the login with the specified ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the login to delete
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Login deleted successfully'
+        '404':
+          description: Login not found
+        '500':
+          description: Failed to delete login
+
+components:
+  schemas:
+    Login:
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: int64
+          readOnly: true
+          example: 1
+        LAST_LOGIN:
+          type: string
+          format: date-time
+          example: "2023-05-25T10:30:00Z"
+        EMAIL:
+          type: string
+          example: "user@example.com"
+        HASHED_PASSWORD:
+          type: string
+          example: "hashed_password"
+        CREATED_AT:
+          type: string
+          format: date-time
+          example: "2023-05-25T10:30:00Z"
+        UPDATED_AT:
+          type: string
+          format: date-time
+          example: "2023-05-25T10:45:00Z"
+      required:
+        - EMAIL
+        - HASHED_PASSWORD

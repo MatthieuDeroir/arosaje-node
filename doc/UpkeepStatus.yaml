@@ -1,0 +1,145 @@
+openapi: 3.0.0
+info:
+  title: AROSAJE API
+  description: An API for data of Arosaje Application
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:4000/api
+
+paths:
+  /upkeep-statuses:
+    post:
+      tags: [UpkeepStatuses]
+      summary: Create a new upkeep status
+      description: Creates a new upkeep status and returns it
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpkeepStatus'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpkeepStatus'
+        '500':
+          description: Failed to create upkeep status
+
+    get:
+      tags: [UpkeepStatuses]
+      summary: Get all upkeep statuses
+      description: Returns a list of all upkeep statuses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UpkeepStatus'
+        '500':
+          description: Failed to get upkeep statuses
+
+  /upkeep-statuses/{id}:
+    get:
+      tags: [UpkeepStatuses]
+      summary: Get upkeep status by ID
+      description: Returns the upkeep status with the specified ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the upkeep status to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpkeepStatus'
+        '404':
+          description: Upkeep status not found
+        '500':
+          description: Failed to get upkeep status
+
+    put:
+      tags: [UpkeepStatuses]
+      summary: Update upkeep status
+      description: Updates the upkeep status with the specified ID and returns it
+      parameters:
+        - name: id
+          in: path
+          description: ID of the upkeep status to update
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpkeepStatus'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpkeepStatus'
+        '404':
+          description: Upkeep status not found
+        '500':
+          description: Failed to update upkeep status
+
+    delete:
+      tags: [UpkeepStatuses]
+      summary: Delete upkeep status
+      description: Deletes the upkeep status with the specified ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the upkeep status to delete
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Upkeep status not found
+        '500':
+          description: Failed to delete upkeep status
+
+components:
+  schemas:
+    UpkeepStatus:
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: int32
+          readOnly: true
+        STATUS:
+          type: string
+          description: The status of the upkeep (e.g. "needs watering")
+          required:
+            - STATUS
+          example:
+            ID: 1
+            STATUS: "needs watering"
+

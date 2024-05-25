@@ -1,0 +1,148 @@
+openapi: 3.0.0
+info:
+  title: AROSAJE API
+  description: An API for data of Arosaje Application
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:4000/api
+
+paths:
+  /comments:
+    get:
+      tags: [Comment]
+      summary: Get all comments
+      description: Returns a list of all comments
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '500':
+          description: Internal server error
+
+    post:
+      tags: [Comment]
+      summary: Create a new comment
+      description: Creates a new comment and returns it
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Bad request
+  /comments/{id}:
+    get:
+      tags: [Comment]
+      summary: Get a comment by ID
+      description: Returns the comment with the specified ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the comment to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+
+    put:
+      tags: [Comment]
+      summary: Update a comment
+      description: Updates the comment with the specified ID and returns it
+      parameters:
+        - name: id
+          in: path
+          description: ID of the comment to update
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags: [Comment]
+      summary: Delete a comment
+      description: Deletes the comment with the specified ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the comment to delete
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    Comment:
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: int32
+          readOnly: true
+          example: 1
+        USER_ID:
+          type: integer
+          format: int32
+          example: 1
+        BODY:
+          type: string
+          format: text
+          example: "This is a great post!"
+        CREATED_AT:
+          type: string
+          format: date-time
+          readOnly: true
+          example: "2022-12-08T16:20:00.000Z"
+        UPDATED_AT:
+          type: string
+          format: date-time
+          readOnly: true
+          example: "2022-12-08T16:20:00.000Z"

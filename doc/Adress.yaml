@@ -1,0 +1,150 @@
+openapi: 3.0.0
+info:
+  title: AROSAJE API
+  description: An API for data of Arosaje Application
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api
+
+paths:
+  /addresses:
+    post:
+      tags: [Address]
+      summary: Create a new address
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '500':
+          description: Failed to create address
+
+    get:
+      tags: [Address]
+      summary: Get all addresses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Address'
+        '500':
+          description: Failed to get addresses
+
+  /addresses/{id}:
+    get:
+      tags: [Address]
+      summary: Get address by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the address to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '404':
+          description: Address not found
+        '500':
+          description: Failed to get address
+
+    put:
+      tags: [Address]
+      summary: Update address by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the address to update
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '404':
+          description: Address not found
+        '500':
+          description: Failed to update address
+
+    delete:
+      tags: [Address]
+      summary: Delete address by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the address to delete
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: Address not found
+        '500':
+          description: Failed to delete address
+
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: int32
+          readOnly: true
+          example: 1
+        STREET:
+          type: string
+          example: "123 Main St"
+        NUMBER:
+          type: string
+          example: "Apt 4"
+        POSTAL_CODE:
+          type: string
+          example: "12345"
+        CITY:
+          type: string
+          example: "Anytown"
+        COUNTRY:
+          type: string
+          example: "USA"
+        LATITUDE:
+          type: number
+          format: float
+          multipleOf: 0.00000001
+          example: 40.712776
+        LONGITUDE:
+          type: number
+          format: float
+          multipleOf: 0.00000001
+          example: -74.005974

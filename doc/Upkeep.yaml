@@ -1,0 +1,157 @@
+openapi: 3.0.0
+info:
+  title: AROSAJE API
+  description: An API for data of Arosaje Application
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:4000/api
+
+paths:
+  /upkeeps:
+    post:
+      tags: [Upkeep]
+      summary: Create a new upkeep
+      description: Creates a new upkeep and returns it
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Upkeep'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Upkeep'
+        '500':
+          description: Failed to create upkeep
+    get:
+      tags: [Upkeep]
+      summary: Get all upkeeps
+      description: Returns a list of all upkeeps
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Upkeep'
+        '500':
+          description: Failed to get upkeeps
+
+  /upkeeps/{id}:
+    get:
+      tags: [Upkeep]
+      summary: Get upkeep by ID
+      description: Returns the upkeep with the specified ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the upkeep to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Upkeep'
+        '404':
+          description: Upkeep not found
+        '500':
+          description: Failed to get upkeep
+
+    put:
+      tags: [Upkeep]
+      summary: Update upkeep
+      description: Updates the upkeep with the specified ID and returns it
+      parameters:
+        - name: id
+          in: path
+          description: ID of the upkeep to update
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Upkeep'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Upkeep'
+        '404':
+          description: Upkeep not found
+        '500':
+          description: Failed to update upkeep
+
+    delete:
+      tags: [Upkeep]
+      summary: Delete upkeep
+      description: Deletes the upkeep with the specified ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the upkeep to delete
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Upkeep not found
+        '500':
+          description: Failed to delete upkeep
+
+components:
+  schemas:
+    Upkeep:
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: int32
+          readOnly: true
+        PLANT_ID:
+          type: integer
+          format: int32
+        USER_ID:
+          type: integer
+          format: int32
+        REQUIRE_ADVICE:
+          type: boolean
+        UPKEEP_STATUS_ID:
+          type: integer
+          format: int32
+        START_DATE:
+          type: string
+          format: date
+        END_DATE:
+          type: string
+          format: date
+        CREATED_AT:
+          type: string
+          format: date-time
+        UPDATED_AT:
+          type: string
+          format: date-time
+      required:
+        - PLANT_ID
+        - USER_ID
+        - REQUIRE_ADVICE
+        - UPKEEP_STATUS_ID
+        - START_DATE

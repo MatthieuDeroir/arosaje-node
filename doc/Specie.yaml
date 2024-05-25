@@ -1,135 +1,131 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
-  title: Arosaje API
+  title: AROSAJE API
+  description: An API for data of Arosaje Application
   version: 1.0.0
+
 servers:
-  - url: http://localhost:8080/api/species
+  - url: http://localhost:4000/api
 
 tags:
-    - name: Species
-      description: Operations about species
+  - name: Species
+    description: API endpoints for managing species
 
 paths:
   /species:
+    post:
+      tags: [Species]
+      summary: Create a new species
+      requestBody:
+        description: The species to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Species'
+      responses:
+        '201':
+          description: The created species
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Species'
+        '500':
+          description: Internal server error
+
     get:
-      tags:
-        - Species
-      summary: Récupère toutes les espèces
-      description: Récupère toutes les espèces
+      tags: [Species]
+      summary: Get all species
+      description: Returns a list of all species
       responses:
         '200':
-          description: Liste des espèces
+          description: List of species
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Species'
-    post:
-      tags:
-        - Species
-      summary: Ajoute une nouvelle espèce
-      description: Ajoute une nouvelle espèce
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Species'
-        required: true
-      responses:
-        '201':
-          description: Espèce créée
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Species'
-    put:
-      tags:
-        - Species
-      summary: Met à jour une espèce
-      description: Met à jour une espèce
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Species'
-        required: true
-      responses:
-        '200':
-          description: Espèce mise à jour
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Species'
+        '500':
+          description: Internal server error
+
   /species/{id}:
     get:
-      tags:
-        - Species
-      summary: Récupère une espèce par ID
-      description: Récupère une espèce par ID
+      tags: [Species]
+      summary: Get a species by ID
+      description: Returns a single species by ID
       parameters:
         - name: id
           in: path
-          description: ID de l'espèce
           required: true
           schema:
             type: integer
-            example: 1
       responses:
         '200':
-          description: Espèce trouvée
+          description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Species'
-    delete:
-      tags:
-        - Species
-      summary: Supprime une espèce par ID
-      description: Supprime une espèce par ID
+        '404':
+          description: Species not found
+        '500':
+          description: Internal server error
+
+    put:
+      tags: [Species]
+      summary: Update a species
+      description: Updates an existing species
       parameters:
         - name: id
           in: path
-          description: ID de l'espèce
           required: true
           schema:
             type: integer
-            example: 1
+      requestBody:
+        description: The updated species
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Species'
+      responses:
+        '200':
+          description: The updated species
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Species'
+        '404':
+          description: Species not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags: [Species]
+      summary: Delete a species
+      description: Deletes a species by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
       responses:
         '204':
-          description: Espèce supprimée
-  /species/findByName/{name}:
-    get:
-      tags:
-        - Species
-      summary: Récupère une espèce par nom
-      description: Récupère une espèce par nom
-      parameters:
-        - name: name
-          in: path
-          description: Nom de l'espèce
-          required: true
-          schema:
-            type: string
-            example: "Rose"
-      responses:
-        '200':
-          description: Espèce trouvée
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Species'
+          description: OK
+        '404':
+          description: Species not found
+        '500':
+          description: Internal server error
 
 components:
   schemas:
     Species:
       type: object
       properties:
-        Id:
+        ID:
           type: integer
-          example: 1
-        name:
+          readOnly: true
+        NAME:
           type: string
-          example: "Rose"
-      required:
-        - name

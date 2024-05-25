@@ -1,20 +1,18 @@
 openapi: 3.0.0
 info:
-  title: Arosaje API
+  title: AROSAJE API
+  description: An API for data of Arosaje Application
   version: 1.0.0
-servers:
-  - url: http://localhost:4000/api/announces
 
-tags:
-  - name: Announce
-    description: Announce management
+servers:
+  - url: http://localhost:4000/api
 
 paths:
   /announces:
     get:
-      tags:
-        - Announce
+      tags: [Announces]
       summary: Get all announces
+      description: Returns a list of all announces
       responses:
         '200':
           description: OK
@@ -24,51 +22,41 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Announce'
-    post:
-      tags:
-        - Announce
-      summary: Add a new announce
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Announce'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Announce'
+        '500':
+          description: Failed to get announces
 
-    put:
-      tags:
-        - Announce
-      summary: Update an announce
+    post:
+      tags: [Announces]
+      summary: Create a new announce
+      description: Creates a new announce and returns it
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Announce'
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Announce'
+        '400':
+          description: Failed to create announce
 
   /announces/{id}:
     get:
-      tags:
-        - Announce
+      tags: [Announces]
       summary: Get announce by ID
+      description: Returns the announce with the specified ID
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
+          description: ID of the announce to retrieve
           required: true
           schema:
             type: integer
+            format: int32
       responses:
         '200':
           description: OK
@@ -76,156 +64,112 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Announce'
-    delete:
-      tags:
-        - Announce
-      summary: Delete an announce
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: OK
+        '404':
+          description: Announce not found
+        '500':
+          description: Failed to get announce
 
-  /announces/findByAnnouncerId/{announcerId}:
-    get:
-      tags:
-        - Announce
-      summary: Get all announces by announcer ID
+    put:
+      tags: [Announces]
+      summary: Update announce
+      description: Updates the announce with the specified ID and returns it
       parameters:
-        - in: path
-          name: announcerId
+        - name: id
+          in: path
+          description: ID of the announce to update
           required: true
           schema:
             type: integer
-            example: 1
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Announce'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Announce'
-  /announces/findByPlantId/{plantId}:
-    get:
-      tags:
-        - Announce
-      summary: Get all announces by plant ID
+                $ref: '#/components/schemas/Announce'
+        '404':
+          description: Announce not found
+        '400':
+          description: Failed to update announce
+
+    delete:
+      tags: [Announces]
+      summary: Delete announce
+      description: Deletes the announce with the specified ID
       parameters:
-        - in: path
-          name: plantId
+        - name: id
+          in: path
+          description: ID of the announce to delete
           required: true
           schema:
             type: integer
-            example: 1
+            format: int32
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Announce'
-  /announces/findByStartDate/{startDate}:
-    get:
-      tags:
-        - Announce
-      summary: Get all announces by start date
-      parameters:
-        - in: path
-          name: startDate
-          required: true
-          schema:
-            type: string
-            example: "2021-06-01"
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Announce'
-  /announces/findByEndDate/{endDate}:
-    get:
-      tags:
-        - Announce
-      summary: Get all announces by end date
-      parameters:
-        - in: path
-          name: endDate
-          required: true
-          schema:
-            type: string
-            example: "2021-06-01"
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Announce'
-  /announces/findByTitle/{title}:
-    get:
-      tags:
-        - Announce
-      summary: Get all announces by title
-      parameters:
-        - in: path
-          name: title
-          required: true
-          schema:
-            type: string
-            example: "Recherche de Gardien - Nantes"
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Announce'
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Announce deleted successfully'
+        '404':
+          description: Announce not found
+        '500':
+          description: Failed to delete announce
 
 components:
   schemas:
     Announce:
       type: object
       properties:
-        id:
+        ID:
           type: integer
+          format: int64
+          readOnly: true
           example: 1
-        announcerId:
+        ANNOUNCER_ID:
           type: integer
-          example: 5
-        plantId:
+          format: int64
+          example: 1
+        UPKEEP_ID:
           type: integer
-          example: 429
-        title:
+          format: int64
+          example: 1
+        TITLE:
           type: string
-          example: "Recherche de Gardien - Nantes"
-        body:
+          example: "New Maintenance Schedule"
+        BODY:
           type: string
-          example: "Je recherche un gardien pour ma plante squr Nantes"
-        startDate:
+          example: "Details about the new maintenance schedule."
+        START_DATE:
           type: string
-          example: "2021-06-01"
-        endDate:
+          format: date
+          example: "2023-06-01"
+        END_DATE:
           type: string
-          example: "2021-06-30"
-        createdAt:
+          format: date
+          example: "2023-06-30"
+        CREATED_AT:
           type: string
-          example: "2021-05-01"
-        updatedAt:
-            type: string
-            example: "2021-05-02"
-
+          format: date-time
+          example: "2023-05-25T10:30:00Z"
+        UPDATED_AT:
+          type: string
+          format: date-time
+          example: "2023-05-25T10:45:00Z"
+      required:
+        - ANNOUNCER_ID
+        - UPKEEP_ID
+        - TITLE
+        - BODY
+        - START_DATE
+        - END_DATE
