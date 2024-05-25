@@ -136,9 +136,14 @@ components:
           format: int64
           readOnly: true
           example: 1
-        CONVERSATION_PARTICIPANT_ID:
+        USER_ID1:
           type: integer
-          example: 1
+          format: int32
+          example: 1 (sender)
+        USER_ID2:
+          type: integer
+          format: int32
+          example: 1 (receiver)
         BODY:
           type: string
           example: "This is a message."
@@ -151,5 +156,4 @@ components:
           format: date-time
           example: "2023-05-25T10:45:00Z"
       required:
-        - CONVERSATION_PARTICIPANT_ID
         - BODY

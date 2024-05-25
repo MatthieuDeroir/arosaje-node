@@ -130,10 +130,14 @@ components:
     Conversation:
       type: object
       properties:
-        ID:
+        USER_ID1:
           type: integer
           format: int64
-          readOnly: true
           example: 1
+        USER_ID2:
+          type: integer
+          format: int64
+          example: 2
       required:
-        - ID
+        - USER_ID1
+        - USER_ID2
